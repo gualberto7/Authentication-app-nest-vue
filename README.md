@@ -15,8 +15,8 @@ This is a full stack project developed with Vuejs and Nestjs. The main module is
 
 To install and run this project, follow these steps:
 
-1. Backend instructions [here](https://github.com/unosquare-bo/gualberto-cuiza_004-challenge/tree/main/server).
-2. Frontend instructions [here](https://github.com/unosquare-bo/gualberto-cuiza_004-challenge/tree/main/client).
+1. Backend instructions [here](https://github.com/gualberto7/Authentication-app-nest-vue/tree/main/server).
+2. Frontend instructions [here](https://github.com/gualberto7/Authentication-app-nest-vue/tree/main/client).
 
 Or use docker
 
