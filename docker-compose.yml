@@ -1,0 +1,67 @@
+version: '3.7'
+
+networks:
+  mynetwork:
+
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - 5432:5432
+    volumes:
+      - ./server/postgres:/var/lib/postgresql/data
+    env_file:
+      - ./server/.env
+    networks:
+      - mynetwork
+
+  server:
+    image: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - ./server/.env
+    ports:
+      - 3000:3000
+    networks:
+      - mynetwork
+
+  client:
+    image: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - 5173:80
+    depends_on:
+      - server
+    networks:
+      - mynetwork
+
+  cypress:
+    image: "cypress/included:13.13.0"
+    depends_on:
+      - client
+    environment:
+      - CYPRESS_baseUrl=http://client
+    working_dir: /e2e
+    volumes:
+      - ./client/cypress:/e2e/cypress
+      - ./client/cypress.config.ts:/e2e/cypress.config.ts
+      - ./client/tsconfig.json:/e2e/tsconfig.json
+      - ./client/tsconfig.node.json:/e2e/tsconfig.node.json
+      - ./client/tsconfig.app.json:/e2e/tsconfig.app.json
+      - ./client/tsconfig.vitest.json:/e2e/tsconfig.vitest.json
+      - ./client/node_modules:/e2e/node_modules
+    networks:
+      - mynetwork
+
+volumes:
+  postgres:
+  cypress:
